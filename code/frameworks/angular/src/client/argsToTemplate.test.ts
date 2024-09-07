@@ -13,7 +13,7 @@ describe('argsToTemplate', () => {
     };
     const options: ArgsToTemplateOptions<keyof typeof args> = {};
     const result = argsToTemplate(args, options);
-    expect(result).toBe('[prop1]="prop1" [prop3]="prop3"');
+    expect(result).toBe(`[prop1]="'value1'" [prop3]="'value3'"`);
   });
 
   it('should include properties from include option', () => {
@@ -26,7 +26,7 @@ describe('argsToTemplate', () => {
       include: ['prop1', 'prop3'],
     };
     const result = argsToTemplate(args, options);
-    expect(result).toBe('[prop1]="prop1" [prop3]="prop3"');
+    expect(result).toBe(`[prop1]="'value1'" [prop3]="'value3'"`);
   });
 
   it('should include non-undefined properties from include option', () => {
@@ -39,7 +39,7 @@ describe('argsToTemplate', () => {
       include: ['prop1', 'prop3'],
     };
     const result = argsToTemplate(args, options);
-    expect(result).toBe('[prop1]="prop1"');
+    expect(result).toBe(`[prop1]="'value1'"`);
   });
 
   it('should exclude properties from exclude option', () => {
@@ -52,7 +52,7 @@ describe('argsToTemplate', () => {
       exclude: ['prop2'],
     };
     const result = argsToTemplate(args, options);
-    expect(result).toBe('[prop1]="prop1" [prop3]="prop3"');
+    expect(result).toBe(`[prop1]="'value1'" [prop3]="'value3'"`);
   });
 
   it('should exclude properties from exclude option and undefined properties', () => {
@@ -65,7 +65,7 @@ describe('argsToTemplate', () => {
       exclude: ['prop2'],
     };
     const result = argsToTemplate(args, options);
-    expect(result).toBe('[prop1]="prop1"');
+    expect(result).toBe(`[prop1]="'value1'"`);
   });
 
   it('should prioritize include over exclude when both options are given', () => {
@@ -79,7 +79,7 @@ describe('argsToTemplate', () => {
       exclude: ['prop2', 'prop3'],
     };
     const result = argsToTemplate(args, options);
-    expect(result).toBe('[prop1]="prop1" [prop2]="prop2"');
+    expect(result).toBe(`[prop1]="'value1'" [prop2]="'value2'"`);
   });
 
   it('should work when neither include nor exclude options are given', () => {
@@ -89,7 +89,7 @@ describe('argsToTemplate', () => {
     };
     const options: ArgsToTemplateOptions<keyof typeof args> = {};
     const result = argsToTemplate(args, options);
-    expect(result).toBe('[prop1]="prop1" [prop2]="prop2"');
+    expect(result).toBe(`[prop1]="'value1'" [prop2]="'value2'"`);
   });
 
   it('should bind events correctly when value is a function', () => {
@@ -101,12 +101,12 @@ describe('argsToTemplate', () => {
   it('should mix properties and events correctly', () => {
     const args = { input: 'Value1', event1: () => {} };
     const result = argsToTemplate(args, {});
-    expect(result).toEqual('[input]="input" (event1)="event1($event)"');
+    expect(result).toEqual(`[input]="'Value1'" (event1)="event1($event)"`);
   });
 
   it('should format for non dot notation', () => {
     const args = { 'non-dot': 'Value1', 'dash-out': () => {} };
     const result = argsToTemplate(args, {});
-    expect(result).toEqual('[non-dot]="this[\'non-dot\']" (dash-out)="this[\'dash-out\']($event)"');
+    expect(result).toEqual(`[non-dot]="'Value1'" (dash-out)="this[\'dash-out\']($event)"`);
   });
 });

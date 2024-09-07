@@ -1,4 +1,7 @@
-import { formatPropInTemplate } from './angular-beta/ComputesTemplateFromComponent';
+import {
+  formatPropInTemplate,
+  createAngularInputProperty,
+} from './angular-beta/ComputesTemplateFromComponent';
 
 /**
  * Options for controlling the behavior of the argsToTemplate function.
@@ -73,7 +76,7 @@ export function argsToTemplate<A extends Record<string, any>>(
     .map(([key, value]) =>
       typeof value === 'function'
         ? `(${key})="${formatPropInTemplate(key)}($event)"`
-        : `[${key}]="${formatPropInTemplate(key)}"`
+        : createAngularInputProperty({ propertyName: key, value: args[key] })
     )
     .join(' ');
 }
